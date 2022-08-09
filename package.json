@@ -13,7 +13,6 @@
     "@truffle/hdwallet-provider": "^2.0.13",
     "dotenv": "^16.0.1",
     "dotenv-webpack": "^8.0.0",
-    "fs": "^0.0.1-security",
     "fs-extra": "^10.1.0",
     "ganache-cli": "^6.12.2",
     "mocha": "^10.0.0",
