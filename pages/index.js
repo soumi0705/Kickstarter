@@ -1,46 +1,52 @@
 import React, { Component } from "react";
-import factory from '../ethereum/factory'
-import {Card, Button} from 'semantic-ui-react';
-import 'semantic-ui-css/semantic.min.css'
+import factory from "../ethereum/factory";
+import { Card, Button } from "semantic-ui-react";
+import "semantic-ui-css/semantic.min.css";
 import Layout from "../components/layout";
-class CampaignIndex extends Component{
-    static async getInitialProps() {
-        var campaigns = await factory.methods
-            .getDeployedCampaigns()
-            .call();
-        return {campaigns};
-        
-    }
+import { Link } from "../routes";
+class CampaignIndex extends Component {
+  static async getInitialProps() {
+    var campaigns = await factory.methods.getDeployedCampaigns().call();
+    return { campaigns };
+  }
 
-    renderCampaigns() {
-        const items = this.props.campaigns.map(address =>{
-            return {
-                header: address,
-                description: <a>View Campaign</a>,
-                fluid: true,
-            }
-        });
-        return <Card.Group items={items} />
-    }
+  renderCampaigns() {
+    const items = this.props.campaigns.map((address) => {
+      return {
+        header: address,
+        description: (
+        <Link route={`/campaigns/${address}`}>
+        <a>View Campaign</a>
+        </Link>
+        ),
+        fluid: true,
+      };
+    });
+    return <Card.Group items={items} />;
+  }
 
-    render(){
-        return( 
-        <Layout>
+  render() {
+    return (
+      <Layout>
         <div>
-        <h3>Open Campaigns</h3>
-        
-        <Button
-            content="Create Campaign"
-            icon="add circle"
-            primary
-            labelPosition="left"
-            floated="right"
-        />
-        {this.renderCampaigns()}
+          <h3>Open Campaigns</h3>
+          <Link route="/campaigns/new">
+            <a>
+              <Button
+                content="Create Campaign"
+                icon="add circle"
+                primary
+                labelPosition="left"
+                floated="right"
+              />
+            </a>
+          </Link>
+
+          {this.renderCampaigns()}
         </div>
-        </Layout>        
-        )
-    }
+      </Layout>
+    );
+  }
 }
 
 export default CampaignIndex;
