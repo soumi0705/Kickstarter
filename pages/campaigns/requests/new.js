@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Layout from "../../../components/layout";
 import { Form, Button, Message, Input } from "semantic-ui-react";
-import campaign from "../../../ethereum/campaign";
+import Campaign from "../../../ethereum/campaign";
 import web3 from "../../../ethereum/web3";
 import { Link, Router } from "../../../routes";
 
@@ -22,13 +22,14 @@ class RequestNew extends Component {
     event.preventDefault();
     const campaign = Campaign(this.props.address);
     this.setState({ loading: true });
+    const { description, value, recipient } = this.state;
     try {
       const accounts = await web3.eth.getAccounts();
-      await campaign.methods.contribute().send({
-        from: accounts[0],
-        value: web3.utils.toWei(this.state.value, "ether"),
-      });
-      this.props.refreshPage();
+      await campaign.methods
+        .createRequest(description, web3.utils.toWei(value, "ether"), recipient)
+        .send({
+          from: accounts[0],
+        });
     } catch (err) {
       this.setState({ errorMessage: `${err.message}` });
     }
@@ -37,16 +38,24 @@ class RequestNew extends Component {
   render() {
     return (
       <Layout>
+        <Link route={`/campaigns/${this.props.address}/requests`}>
+          <a>
+            Back
+          </a>
+        </Link>
         <h3>Create a Request</h3>
         <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
           <Form.Field>
             <label>Description</label>
             <Input
-              label="ether"
-              labelPosition="right"
+              // label="ether"
+              // labelPosition="right"
               value={this.state.description}
               onChange={(event) => {
-                this.setState({ errorMessage: "", description: event.target.value });
+                this.setState({
+                  errorMessage: "",
+                  description: event.target.value,
+                });
               }}
             />
           </Form.Field>
@@ -64,11 +73,14 @@ class RequestNew extends Component {
           <Form.Field>
             <label>Recipient</label>
             <Input
-              label="ether"
-              labelPosition="right"
+              // label="ether"
+              // labelPosition="right"
               value={this.state.recipient}
               onChange={(event) => {
-                this.setState({ errorMessage: "", recipient: event.target.value });
+                this.setState({
+                  errorMessage: "",
+                  recipient: event.target.value,
+                });
               }}
             />
           </Form.Field>
