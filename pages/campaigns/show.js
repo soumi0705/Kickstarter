@@ -85,7 +85,7 @@ class CampaignShow extends Component {
         header: web3.utils.fromWei(balance, "ether"),
         meta: "Campaign Balance (ether)",
         description:
-          "THe balance is how much money this campaign has left to spend",
+          "The balance is how much money this campaign has left to spend",
       },
     ];
     return <Card.Group items={items} />;
